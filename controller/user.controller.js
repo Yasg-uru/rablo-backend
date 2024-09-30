@@ -38,15 +38,60 @@ class userController {
       if (!user) {
         return next(new ErrorHandler(404, "User not found"));
       }
-      const ispasswordCorrect = await isCorrectPassword(password, user.password);
+      const ispasswordCorrect = await isCorrectPassword(
+        password,
+        user.password
+      );
       if (!ispasswordCorrect) {
         return next(new ErrorHandler(400, "Please Enter valid credentials"));
       }
-      const Token=getToken(user);
-      sendtoken(200,res,user,Token);
+      const Token = getToken(user);
+      sendtoken(200, res, user, Token);
     } catch (error) {
-        console.log("this is error :",error)
-        next(error)
+      console.log("this is error :", error);
+      next(error);
+    }
+  }
+  static async forgotPassword(req, res, next) {
+    try {
+      const { email } = req.body;
+      const user = await userModel.findOne({ email });
+      if (!user) {
+        return next(new ErrorHandler(404, "User not found"));
+      }
+
+      // Generate Reset Token
+      const resetToken = user.getResetPasswordToken();
+      await user.save({ validateBeforeSave: false });
+
+      // Create a reset password URL
+      const resetUrl = `${req.protocol}://${req.get(
+        "host"
+      )}/api/v1/reset-password/${resetToken}`;
+
+      const message = `You have requested a password reset. Please make a PUT request to: \n\n ${resetUrl}`;
+
+      try {
+        await sendEmail({
+          email: user.email,
+          subject: "Password Reset Request",
+          message,
+        });
+
+        res.status(200).json({
+          success: true,
+          message: `Reset token sent to: ${user.email}`,
+        });
+      } catch (err) {
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+
+        await user.save({ validateBeforeSave: false });
+
+        return next(new ErrorHandler(500, "Email could not be sent"));
+      }
+    } catch (error) {
+      next(error);
     }
   }
 }

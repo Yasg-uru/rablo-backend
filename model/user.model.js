@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-
+import crypto from "crypto"
 const userSchema = new Schema(
   {
     name: {
@@ -29,10 +29,23 @@ const userSchema = new Schema(
       enum: ["customer", "admin"],
       default: "customer",
     },
+    resetpasswordToken: {
+      type: String,
+    },
+    resetPasswordTokenExpire: {
+      type: Date,
+    },
   },
   {
     timestamps: true,
   }
 );
+userSchema.methods.getResetPasswordToken=function(){
+const resetToken=crypto.randomBytes(20).toString('hex');
+this.resetpasswordToken=resetToken;
 
+this.resetPasswordTokenExpire=Date.now()+360000;
+return resetToken;
+
+}
 export default mongoose.model("User", userSchema);
