@@ -14,5 +14,6 @@ productRouter.post(
   upload.single("file"),
   ProductController.createProduct
 );
+productRouter.get('/',ProductController.getAllProducts);
 
 export default productRouter;

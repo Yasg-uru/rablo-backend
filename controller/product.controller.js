@@ -20,5 +20,14 @@ class ProductController {
       next(error);
     }
   }
+  static async getAllProducts(req, res, next) {
+    try {
+      const products = await ProductModel.find();
+      res.status(200).json(products);
+    } catch (error) {
+      console.log("This is an error:", error);
+      next(error);
+    }
+  }
 }
 export default ProductController;
