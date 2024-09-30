@@ -3,6 +3,7 @@ import { getToken, isCorrectPassword } from "../utils/auth.util.js";
 import ErrorHandler from "../utils/errorhandler.utils.js";
 import bcrypt from "bcryptjs";
 import sendtoken from "../utils/sendToken.js";
+import sendEmail from "../utils/sendmail.util.js";
 
 class userController {
   static async Register(req, res, next) {
@@ -83,14 +84,15 @@ class userController {
           message: `Reset token sent to: ${user.email}`,
         });
       } catch (err) {
-        user.resetPasswordToken = undefined;
-        user.resetPasswordExpire = undefined;
+        user.resetpasswordToken = undefined;
+        user.resetPasswordTokenExpire = undefined;
 
         await user.save({ validateBeforeSave: false });
 
         return next(new ErrorHandler(500, "Email could not be sent"));
       }
     } catch (error) {
+      console.log("this is a error in forgot password ");
       next(error);
     }
   }
