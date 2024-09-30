@@ -88,22 +88,32 @@ class ProductController {
         featuredProducts,
       });
     } catch (error) {
-        next(error);
-
+      next(error);
     }
   }
-  static async productsLessThanValue(req,res,next){
+  static async productsLessThanValue(req, res, next) {
     try {
-        const {value}=req.body;
-        const products=await ProductModel.find({price:{$lt:value}});
-        res.status(200).json({
-            message :"fetched products less than certain value",
-            products
-        })
+      const { value } = req.body;
+      const products = await ProductModel.find({ price: { $lt: value } });
+      res.status(200).json({
+        message: "fetched products less than certain value",
+        products,
+      });
     } catch (error) {
-        next(error)
+      next(error);
     }
-
+  }
+  static async productswithHiegherRating(req, res, next) {
+    try {
+      const { value } = req.body;
+      const products = await ProductModel.find({ rating: { $gt: value } });
+      res.status(200).json({
+        message: "fetched products greater than certain value",
+        products,
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 }
 export default ProductController;
