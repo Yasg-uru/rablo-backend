@@ -8,6 +8,7 @@ const sendtoken = function (statuscode, res, user, token) {
     secure: true,
   };
   console.log("this is a date of cookie -expire:", options.expires);
+  console.log("this is a token ",token)
   res.cookie("token", token, options).status(statuscode).json({
     success: true,
     user,

@@ -13,17 +13,18 @@ class userController {
         return next(new ErrorHandler(400, "User Already Exist "));
       }
       const salt = 10;
-      const hashedpassword = bcrypt.hash(password, salt);
+      const hashedpassword = await bcrypt.hash(password, salt);
       const newUser = new userModel({
         name,
         email,
         password: hashedpassword,
       });
       newUser.save();
-      const Token = getToken;
+      const Token = getToken(newUser);
 
-      sendtoken(200, res, user, Token);
+      sendtoken(200, res, newUser, Token);
     } catch (error) {
+        console.log("this is a error",error)
       next(error);
     }
   }
