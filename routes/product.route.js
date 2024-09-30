@@ -29,5 +29,7 @@ productRouter.put(
   ProductController.updateProduct
 );
 productRouter.get("/", ProductController.getAllProducts);
+productRouter.get("/featured", ProductController.featuredProducts);
+productRouter.get("/price", ProductController.productsLessThanValue);
 
 export default productRouter;
