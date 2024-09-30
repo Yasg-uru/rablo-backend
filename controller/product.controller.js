@@ -41,10 +41,14 @@ class ProductController {
         updatedData.productImage = cloudinary.secure_url; // Update image URL if a new image is uploaded
       }
 
-      const updatedProduct = await ProductModel.findByIdAndUpdate(id, updatedData, {
-        new: true, // Return the updated document
-        runValidators: true, // Validate the updated data
-      });
+      const updatedProduct = await ProductModel.findByIdAndUpdate(
+        id,
+        updatedData,
+        {
+          new: true, // Return the updated document
+          runValidators: true, // Validate the updated data
+        }
+      );
 
       if (!updatedProduct) {
         return res.status(404).json({ message: "Product not found" });
@@ -74,6 +78,18 @@ class ProductController {
     } catch (error) {
       console.log("This is an error:", error);
       next(error);
+    }
+  }
+  static async featuredProducts(req, res, next) {
+    try {
+      const featuredProducts = await ProductModel.find({ featured: true });
+      res.status(200).json({
+        message: "Fetched featured products",
+        featuredProducts,
+      });
+    } catch (error) {
+        next(error);
+        
     }
   }
 }
