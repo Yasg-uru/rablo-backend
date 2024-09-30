@@ -1,5 +1,5 @@
 import userModel from "../model/user.model.js";
-import { getToken } from "../utils/auth.util.js";
+import { getToken, isCorrectPassword } from "../utils/auth.util.js";
 import ErrorHandler from "../utils/errorhandler.utils.js";
 import bcrypt from "bcryptjs";
 import sendtoken from "../utils/sendToken.js";
@@ -24,10 +24,30 @@ class userController {
 
       sendtoken(200, res, newUser, Token);
     } catch (error) {
-        console.log("this is a error",error)
+      console.log("this is a error", error);
       next(error);
+    }
+  }
+  static async Login(req, res, next) {
+    try {
+      const { email, password } = req.body;
+      if (!email || !password) {
+        return next(new ErrorHandler(404, "Please Enter valid credentials"));
+      }
+      const user = await userModel.findOne({ email });
+      if (!user) {
+        return next(new ErrorHandler(404, "User not found"));
+      }
+      const ispasswordCorrect = await isCorrectPassword(password, user.password);
+      if (!ispasswordCorrect) {
+        return next(new ErrorHandler(400, "Please Enter valid credentials"));
+      }
+      const Token=getToken(user);
+      sendtoken(200,res,user,Token);
+    } catch (error) {
+        console.log("this is error :",error)
+        next(error)
     }
   }
 }
 export default userController;
-
