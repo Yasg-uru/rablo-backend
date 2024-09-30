@@ -4,5 +4,6 @@ const userRouter=Router();
 userRouter.post("/register",userController.Register);
 userRouter.post("/login",userController.Login);
 userRouter.post("/forgot-password",userController.forgotPassword);
+userRouter.post("/reset-password/:token",userController.resetPassword);
 
 export default userRouter;

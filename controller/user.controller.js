@@ -4,7 +4,7 @@ import ErrorHandler from "../utils/errorhandler.utils.js";
 import bcrypt from "bcryptjs";
 import sendtoken from "../utils/sendToken.js";
 import sendEmail from "../utils/sendmail.util.js";
-
+import crypto from "crypto";
 class userController {
   static async Register(req, res, next) {
     try {
@@ -93,6 +93,35 @@ class userController {
       }
     } catch (error) {
       console.log("this is a error in forgot password ");
+      next(error);
+    }
+  }
+  static async resetPassword(req, res, next) {
+    try {
+      const { token } = req.params;
+      const user = await userModel.findOne({
+        resetPasswordToken: token,
+        resetPasswordExpire: { $gt: Date.now() },
+      });
+
+      if (!user) {
+        return next(new ErrorHandler(400, "Invalid or expired token"));
+      }
+
+      const { password } = req.body;
+
+      const salt = 10;
+      user.password = await bcrypt.hash(password, salt);
+
+      user.resetpasswordToken = undefined;
+      user.resetPasswordTokenExpire = undefined;
+
+      await user.save();
+
+      const Token = getToken(user);
+      sendtoken(200, res, user, Token);
+    } catch (error) {
+      console.log("error in reset-password:", error);
       next(error);
     }
   }
