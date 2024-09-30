@@ -4,17 +4,19 @@ import { connectDb } from "./utils/connectDb.js";
 import { errorMiddleware } from "./middleware/error.middleware.js";
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.route.js";
+import productRouter from "./routes/product.route.js";
 config();
 
 const app = express();
 
 app.use(express.json());
-app.use(express.urlencoded({extended:false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 const PORT = process.env.PORT || 4000;
-app.use("/user",userRouter);
+app.use("/user", userRouter);
+app.use("/product", productRouter);
 connectDb();
-app.use(errorMiddleware)
+app.use(errorMiddleware);
 
 app.listen(PORT, () => {
   console.log(`server is running on port : ${PORT}`);
