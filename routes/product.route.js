@@ -21,6 +21,13 @@ productRouter.delete(
 
   ProductController.deleteProduct
 );
+productRouter.put(
+  "/update/:id",
+
+  isAuthenticated,
+
+  ProductController.updateProduct
+);
 productRouter.get("/", ProductController.getAllProducts);
 
 export default productRouter;
