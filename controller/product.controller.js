@@ -29,5 +29,22 @@ class ProductController {
       next(error);
     }
   }
+  static async deleteProduct(req, res, next) {
+    try {
+      const { id } = req.params;
+      const deletedProduct = await ProductModel.findByIdAndDelete(id);
+
+      if (!deletedProduct) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+
+      res.status(204).json({
+        message: "Product deleted successfully",
+      });
+    } catch (error) {
+      console.log("This is an error:", error);
+      next(error);
+    }
+  }
 }
 export default ProductController;

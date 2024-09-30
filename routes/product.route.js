@@ -10,10 +10,17 @@ productRouter.post(
   "/create",
 
   isAuthenticated,
-  authorization("admin"),
+
   upload.single("file"),
   ProductController.createProduct
 );
-productRouter.get('/',ProductController.getAllProducts);
+productRouter.delete(
+  "/delete/:id",
+
+  isAuthenticated,
+
+  ProductController.deleteProduct
+);
+productRouter.get("/", ProductController.getAllProducts);
 
 export default productRouter;
