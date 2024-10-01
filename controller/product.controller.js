@@ -4,12 +4,10 @@ import uploadOnCloudinary from "../utils/cloudinary.util.js";
 class ProductController {
   static async createProduct(req, res, next) {
     try {
-      // console.log("this is req.file:", req.file);
-      // const file = req.file;
-      // const cloudinary = await uploadOnCloudinary(file.path);
+      const { productId, name, price, featured, rating, company } = req.body;
       const newProduct = new ProductModel({
-        // productImage: cloudinary.secure_url,
-        ...req.body,
+        
+        productId, name, price, featured, rating, company
       });
       await newProduct.save();
 
