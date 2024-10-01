@@ -11,7 +11,7 @@ productRouter.post(
 
   isAuthenticated,
 
-  upload.single("file"),
+  // upload.single("file"),
   ProductController.createProduct
 );
 productRouter.delete(
