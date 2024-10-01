@@ -8,7 +8,7 @@ class ProductController {
       // const file = req.file;
       // const cloudinary = await uploadOnCloudinary(file.path);
       const newProduct = new ProductModel({
-        productImage: cloudinary.secure_url,
+        // productImage: cloudinary.secure_url,
         ...req.body,
       });
       await newProduct.save();
