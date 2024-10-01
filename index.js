@@ -22,8 +22,8 @@ app.use(
 const PORT = process.env.PORT || 4000;
 app.use("/user", userRouter);
 app.use("/product", productRouter);
-connectDb();
 app.use(errorMiddleware);
+connectDb();
 
 app.listen(PORT, () => {
   console.log(`server is running on port : ${PORT}`);
