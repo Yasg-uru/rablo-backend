@@ -5,7 +5,7 @@ export const getToken=(newUser)=>{
         { id: newUser._id, role: newUser.role },
         process.env.JWT_SECRET,
         {
-          expiresIn: "2d",
+          expiresIn: process.env.JWT_EXPIRE,
         }
       );
       return token;
