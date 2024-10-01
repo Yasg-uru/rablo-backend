@@ -30,6 +30,10 @@ productRouter.put(
 );
 productRouter.get("/", ProductController.getAllProducts);
 productRouter.get("/featured", ProductController.featuredProducts);
-productRouter.get("/price", ProductController.productsLessThanValue);
+productRouter.get("/price/:value", ProductController.productsLessThanValue);
+productRouter.get(
+  "/rating/:value",
+  ProductController.productswithHiegherRating
+);
 
 export default productRouter;

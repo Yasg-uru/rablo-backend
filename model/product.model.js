@@ -23,7 +23,7 @@ const productSchema = new mongoose.Schema({
     default: false,
   },
   rating: {
-    type: mongoose.Decimal128,
+    type: Number,
     default: 0,
   },
   createdAt: {

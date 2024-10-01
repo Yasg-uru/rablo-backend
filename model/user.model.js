@@ -24,11 +24,7 @@ const userSchema = new Schema(
       type: Date,
       default: Date.now, // Automatically sets the creation date
     },
-    role: {
-      type: String,
-      enum: ["customer", "admin"],
-      default: "customer",
-    },
+   
     resetpasswordToken: {
       type: String,
     },

@@ -4,6 +4,7 @@ import uploadOnCloudinary from "../utils/cloudinary.util.js";
 class ProductController {
   static async createProduct(req, res, next) {
     try {
+      console.log("this is req.file:", req.file);
       const file = req.file;
       const cloudinary = await uploadOnCloudinary(file.path);
       const newProduct = new ProductModel({
@@ -23,7 +24,7 @@ class ProductController {
   static async getAllProducts(req, res, next) {
     try {
       const products = await ProductModel.find();
-      res.status(200).json(products);
+      res.status(200).json({ products });
     } catch (error) {
       console.log("This is an error:", error);
       next(error);
@@ -45,8 +46,8 @@ class ProductController {
         id,
         updatedData,
         {
-          new: true, // Return the updated document
-          runValidators: true, // Validate the updated data
+          new: true,
+          runValidators: true,
         }
       );
 
@@ -93,7 +94,8 @@ class ProductController {
   }
   static async productsLessThanValue(req, res, next) {
     try {
-      const { value } = req.body;
+      const { value } = req.params;
+      console.log("this is value:", value);
       const products = await ProductModel.find({ price: { $lt: value } });
       res.status(200).json({
         message: "fetched products less than certain value",
@@ -105,7 +107,7 @@ class ProductController {
   }
   static async productswithHiegherRating(req, res, next) {
     try {
-      const { value } = req.body;
+      const { value } = req.params;
       const products = await ProductModel.find({ rating: { $gt: value } });
       res.status(200).json({
         message: "fetched products greater than certain value",

@@ -61,11 +61,9 @@ class userController {
         return next(new ErrorHandler(404, "User not found"));
       }
 
-      // Generate Reset Token
       const resetToken = user.getResetPasswordToken();
       await user.save({ validateBeforeSave: false });
 
-      // Create a reset password URL
       const resetUrl = `${req.protocol}://${req.get(
         "host"
       )}/api/v1/reset-password/${resetToken}`;
@@ -122,6 +120,22 @@ class userController {
       sendtoken(200, res, user, Token);
     } catch (error) {
       console.log("error in reset-password:", error);
+      next(error);
+    }
+  }
+  static async Logout(req, res, next) {
+    try {
+      res.cookie("token", null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+      });
+
+      res.status(200).json({
+        success: true,
+        message: "Logged out successfully",
+      });
+    } catch (error) {
+      console.log("Error in logout:", error);
       next(error);
     }
   }
